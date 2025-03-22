@@ -1,1 +1,28 @@
+name: Deploy to Vast.ai
 
+on:
+  push:
+    branches:
+      - main  # Chạy khi có thay đổi trên nhánh `main`
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Step 1 - Checkout code
+        uses: actions/checkout@v4
+     
+      - name: Bước 2 - Thiết lập môi trường
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Bước 3 - Cài đặt dependencies
+        run: pip install -r requirements.txt
+
+      - name: Bước 4 - Chạy kiểm thử
+        run: pytest tests/
+
+      - name: Bước 5 - Deploy nếu thành công
+        run: ./deploy.sh
